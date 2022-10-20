@@ -3,17 +3,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { DataSource } from 'typeorm';
 import { User } from './users/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     AuthModule,
+    ConfigModule.forRoot(),
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: '',
+      url: process.env.MONGO_URL || '',
       database: 'database',
       entities: [User],
       synchronize: true,
@@ -22,6 +23,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}
