@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
 @Entity()
-export class User {
+export class Token {
   @ApiProperty()
   @ObjectIdColumn()
   id?: string;
@@ -16,18 +16,5 @@ export class User {
   @ApiProperty()
   @Column()
   @IsNotEmpty()
-  firstName: string;
-
-  @ApiProperty()
-  @Column()
-  @IsNotEmpty()
-  lastName: string;
-
-  @ApiProperty()
-  @Column()
-  @IsNotEmpty()
-  password: string;
-
-  @Column({ default: false })
-  isActive: boolean;
+  token: string;
 }
