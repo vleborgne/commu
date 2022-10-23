@@ -25,8 +25,6 @@ export class UsersService {
 
   async add(user: User): Promise<User> {
     try {
-      console.log('add User');
-
       const userToSave = this.usersRepository.create({
         ...user,
         password: await hashPassword(user.password),
@@ -35,12 +33,14 @@ export class UsersService {
       return await this.usersRepository.save(userToSave);
     } catch (error) {
       console.error(error);
-
       if (error.code === 11000) {
         throw new HttpException('Conflict', HttpStatus.CONFLICT);
       } else {
         throw new HttpException('Error', HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
+  }
+  async update(user: User) {
+    return this.usersRepository.save(user);
   }
 }

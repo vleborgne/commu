@@ -14,6 +14,11 @@ export class AuthController {
     return this.authService.registerUser(user);
   }
 
+  @Get('auth/activate/:token')
+  async activate(@Param() params) {
+    return this.authService.activateUser(params.token);
+  }
+
   @ApiExtraModels(LoginSuccessDTO)
   @ApiResponse({
     status: 202,

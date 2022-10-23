@@ -14,6 +14,10 @@ export class TokenService {
     return this.tokenRepository.findOneBy({ email });
   }
 
+  findOneByToken(token: string): Promise<Token> {
+    return this.tokenRepository.findOneBy({ token });
+  }
+
   async remove(id: string): Promise<void> {
     await this.tokenRepository.delete(id);
   }

@@ -18,7 +18,11 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
-    if (user && (await comparePassword(pass, user.password))) {
+    if (
+      user &&
+      (await comparePassword(pass, user.password)) &&
+      user.isActive === true
+    ) {
       const { ...result } = user;
       return result;
     }
@@ -45,5 +49,17 @@ export class AuthService {
     const token = await this.tokenService.generateToken(user.email);
     this.emailService.sendActivationEmail(token.email, token.token);
     return savedUser;
+  }
+
+  async activateUser(tokenToFind: string) {
+    const token = await this.tokenService.findOneByToken(tokenToFind);
+    if (token && token.email) {
+      const user = await this.usersService.findOneByEmail(token.email);
+      user.isActive = true;
+      await this.usersService.update(user);
+      await this.tokenService.remove(token.id);
+    } else {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
   }
 }
